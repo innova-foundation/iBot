@@ -102,7 +102,7 @@ class Actives
           amnt = (soakbalance / dest.length)
           if (amnt < bot.config.mintip)
             msg.reply "Sorry, not enough in the bucket to go around.
-             ~#{(bot.config.mintip*dest.length) - amnt}#{symb} needed."
+             ~#{(bot.config.mintip*dest.length) - amnt.toFixed(8)}#{symb} needed."
             return
           for users in dest
             bot.daemon.cmd "move", [soakacct,users,amnt], (error, response) ->
@@ -111,7 +111,7 @@ class Actives
                 robot.logger.error "#{JSON.stringify(error)}
                 #{JSON.stringify(response)}"
                 return
-          msg.reply "[OK] Soaking #{dest.toString()} with #{amnt}#{symb}"
+          msg.reply "[OK] Soaking #{dest.toString()} with #{amnt.toFixed(8)}#{symb}"
           robot.brain.set "soaking", false
           return
       days: Math.floor(distance / _day)
@@ -185,7 +185,7 @@ module.exports = (robot) ->
         if robot.brain.get("soaking") is true
           bot.daemon.cmd "getbalance", [soakacct, minconf], (e, r) ->
             soakbalance = parseFloat(r.result)
-            msg.reply "#{soakbalance}#{symb} will be soaked soon"
+            msg.reply "#{soakbalance.toFixed(8)}#{symb} will be soaked soon"
             return
         else
           now = Math.round(+new Date())
@@ -194,7 +194,7 @@ module.exports = (robot) ->
           new actives.soak(robot, dest, msg, time)
           bot.daemon.cmd "getbalance", [soakacct, minconf], (e, r) ->
             soakbalance = parseFloat(r.result)
-            msg.reply "#{soakbalance}#{symb} will be soaked in about
+            msg.reply "#{soakbalance.toFixed(8)}#{symb} will be soaked in about
              #{bot.config.soakinterval_minutes} minutes"
         newtime = Math.round +new Date() / 1000
         robot.brain.set from, newtime
@@ -289,6 +289,12 @@ module.exports = (robot) ->
       hps = response.result.netmhashps.toFixed(2)
       symb = bot.config.symb
       msg.reply "[OK] #{symb} Current Network Hashrate: #{hps}Mh/s"
+	  
+  robot.respond /fscount/i, (msg) ->
+    bot.daemon.cmd "fortunastake count", [], (error, response) ->
+      count = response.result
+      symb = bot.config.symb
+      msg.reply "[OK] #{symb} [FortunaStake Online Count: #{count}]"
 
   robot.respond /info/i, (msg) ->
     bot.daemon.cmd "getmininginfo", [], (error, response) ->
@@ -351,7 +357,7 @@ module.exports = (robot) ->
             robot.logger.error "#{JSON.stringify(error)}
             #{JSON.stringify(response)}"
             return
-          msg.reply "[OK] #{from} tipped #{dest} #{amnt}#{symb}."
+          msg.reply "[OK] #{from} tipped #{dest} #{amnt.toFixed(8)}#{symb}."
           newtime = Math.round +new Date() / 1000
           robot.brain.set from, newtime
           return
@@ -399,7 +405,7 @@ module.exports = (robot) ->
             robot.logger.error "#{JSON.stringify(error)}
             #{JSON.stringify(response)}"
             return
-          msg.reply "[OK] #{from} donated #{amnt}#{symb} to the denarii bot! Thanks @#{from}!"
+          msg.reply "[OK] #{from} donated #{amnt.toFixed(8)}#{symb} to the denarii bot! Thanks @#{from}!"
           newtime = Math.round +new Date() / 1000
           robot.brain.set from, newtime
           return
@@ -409,7 +415,7 @@ module.exports = (robot) ->
         return
 
   robot.respond /about/i, (msg) ->
-    msg.reply "I was coded by upgradeadvice in the middle of the night and gently massaged by enkayz at about 4am"
+    msg.reply "I was coded by upgradeadvice in the middle of the night and gently massaged by enkayz at about 4am and then kingcarsen took me away on his steed"
 
   robot.respond /withdraw (.*) (.*)/i, (msg) ->
     dest = msg.match[2]
@@ -533,7 +539,7 @@ module.exports = (robot) ->
               robot.logger.error "#{JSON.stringify(error)}
               #{JSON.stringify(response)}"
               return
-        msg.reply "[OK] #{from} rained #{rainamnt}#{symb}
+        msg.reply "[OK] #{from} rained #{rainamnt.toFixed(8)}#{symb}
          on #{dest.toString()}"
         newtime = Math.round +new Date() / 1000
         robot.brain.set from, newtime
@@ -588,7 +594,7 @@ module.exports = (robot) ->
               robot.logger.error "#{JSON.stringify(error)}
               #{JSON.stringify(response)}"
               return
-        msg.reply "[OK] #{from} stormed #{rainamnt}#{symb} each to #{loginats.toString()}"
+        msg.reply "[OK] #{from} stormed #{rainamnt.toFixed(8)}#{symb} each to #{loginats.toString()}"
         newtime = Math.round +new Date() / 1000
         robot.brain.set from, newtime
         return

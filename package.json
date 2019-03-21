@@ -1,6 +1,6 @@
 {
-  "name": "gitbot",
-  "version": "0.0.0",
+  "name": "Denarii",
+  "version": "0.0.1",
   "private": true,
   "author": "Gary Ewan Park <gep13@gep13.co.uk>",
   "description": "A simple helpful robot for GitTools",
