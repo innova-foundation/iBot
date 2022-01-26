@@ -13,7 +13,7 @@
 #   hubot address - Get a deposit address for adding to your tipping balance
 #   hubot balance - Show your balance
 #   hubot diff - Show difficulty
-#   hubot donate <amount> - Donate DNR to denarii bot
+#   hubot donate <amount> - Donate DNR to iBot bot
 #   hubot deposit - Get a deposit address for adding to your tipping balance
 #   hubot height - Show block height
 #   hubot hps - Show network hashrate
@@ -229,7 +229,7 @@ module.exports = (robot) ->
       lastblock = d[c].lastblock.toString()
       blockheight = d[c].height.toString()
       port = d[c].port
-      msg.reply "[OK] #{cU} @ yiimp.ccminer.org:#{port} [Workers: #{workers.toString()} @ #{hashmhs}Mh/sec (average #{hashavg}Mh/sec)] - 
+      msg.reply "[OK] #{cU} @ yiimp.ccminer.org:#{port} [Workers: #{workers.toString()} @ #{hashmhs}Mh/sec (average #{hashavg}Mh/sec)] -
       [Last Block: #{lastblock}/#{blockheight}] [Estimated BTC Value: #{estimate}mBTC/Mh/d]"
 
   robot.respond /height/i, (msg) ->
@@ -289,12 +289,12 @@ module.exports = (robot) ->
       hps = response.result.netmhashps.toFixed(2)
       symb = bot.config.symb
       msg.reply "[OK] #{symb} Current Network Hashrate: #{hps}Mh/s"
-	  
+
   robot.respond /fscount/i, (msg) ->
-    bot.daemon.cmd "fortunastake count", [], (error, response) ->
+    bot.daemon.cmd "collateralnode count", [], (error, response) ->
       count = response.result
       symb = bot.config.symb
-      msg.reply "[OK] #{symb} [FortunaStake Online Count: #{count}]"
+      msg.reply "[OK] #{symb} [CollateralNode Online Count: #{count}]"
 
   robot.respond /info/i, (msg) ->
     bot.daemon.cmd "getmininginfo", [], (error, response) ->
@@ -367,7 +367,7 @@ module.exports = (robot) ->
         return
 
   robot.respond /donate ([0-9]*\.?[0-9]+)/i, (msg) ->
-    dest = "denarii"
+    dest = "iBot"
     amnt = Number(msg.match[1])
     from = msg.message.user.name.toLowerCase()
     minconf = bot.config.minconf
@@ -405,7 +405,7 @@ module.exports = (robot) ->
             robot.logger.error "#{JSON.stringify(error)}
             #{JSON.stringify(response)}"
             return
-          msg.reply "[OK] #{from} donated #{amnt.toFixed(8)}#{symb} to the denarii bot! Thanks @#{from}!"
+          msg.reply "[OK] #{from} donated #{amnt.toFixed(8)}#{symb} to the iBot bot! Thanks @#{from}!"
           newtime = Math.round +new Date() / 1000
           robot.brain.set from, newtime
           return
@@ -634,4 +634,3 @@ module.exports = (robot) ->
     return
 
   initialize()
-
